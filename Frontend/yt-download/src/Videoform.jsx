@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./VideoForm.css";
 
-const apiPath = "http://localhost:5000/api/extract";
+const apiPath = "https://yt-cutter-downloader.onrender.com/api/extract";
 
 const convertTimeToSeconds = (time) => {
   const [hours, minutes, seconds] = time.split(":").map(Number);
@@ -13,16 +13,16 @@ export const VideoForm = () => {
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [folderPath, setFolderPath] = useState("C:/Downloads");
-  const [status, setStatus] = useState(""); 
+  const [status, setStatus] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setStatus(""); 
+    setStatus("");
 
     const startInSeconds = convertTimeToSeconds(startTime);
     const endInSeconds = convertTimeToSeconds(endTime);
 
-    setStatus("DOWNLOADING..."); 
+    setStatus("DOWNLOADING...");
 
     try {
       const response = await fetch(apiPath, {
@@ -42,13 +42,13 @@ export const VideoForm = () => {
       const data = await response.json();
       if (data.downloadLink) {
         window.location.href = data.downloadLink;
-        setStatus("DONE"); 
+        setStatus("DONE");
       } else {
-        setStatus(`Error: ${data.error}`); 
+        setStatus(`Error: ${data.error}`);
       }
     } catch (error) {
       console.error("Error submitting form:", error);
-      setStatus("An error occurred."); 
+      setStatus("An error occurred.");
     }
   };
 
@@ -98,10 +98,10 @@ export const VideoForm = () => {
             placeholder="C:/Downloads"
           />
         </div>
-        <button type="submit" className="submit-button">Download</button>
-        <div className="status-message">
-          {status}
-        </div>
+        <button type="submit" className="submit-button">
+          Download
+        </button>
+        <div className="status-message">{status}</div>
       </form>
     </div>
   );
