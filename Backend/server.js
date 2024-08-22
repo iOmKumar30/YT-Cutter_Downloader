@@ -14,7 +14,7 @@ const wss = new WebSocket.Server({ server });
 
 app.use(
   cors({
-    origin: "https://yt-cutter-downloader.onrender.com",
+    origin: "https://yt-cutter.onrender.com",
   })
 );
 app.use(bodyParser.json());
