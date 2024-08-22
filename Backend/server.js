@@ -21,7 +21,6 @@ app.use(bodyParser.json());
 
 const isFolderWritable = async (folderPath) => {
   return new Promise((resolve, reject) => {
-    // write a temporary file to the folder and later delete it to check if the folder is writable or not
     const tempFile = path.join(folderPath, "temp_write_test.txt");
     fs.writeFile(tempFile, "test", (err) => {
       if (err) {
@@ -41,17 +40,14 @@ const isFolderWritable = async (folderPath) => {
 
 app.post("/api/extract", async (req, res) => {
   const { link, startInSeconds, endInSeconds, folderPath } = req.body;
-  console.log(
-    `Received request for video: ${link} from ${startInSeconds} to ${endInSeconds}`
-  );
+  console.log(`Received request for video: ${link} from ${startInSeconds} to ${endInSeconds}`);
   console.log(`Download folder path: ${folderPath}`);
 
   try {
     await isFolderWritable(folderPath);
   } catch (error) {
-    return res
-      .status(500)
-      .json({ error: `Error checking folder permissions: ${error.message}` });
+    console.error(`Error checking folder permissions: ${error.message}`);
+    return res.status(500).json({ error: `Error checking folder permissions: ${error.message}` });
   }
 
   try {
@@ -62,12 +58,6 @@ app.post("/api/extract", async (req, res) => {
       fs.mkdirSync(folderPath, { recursive: true });
       console.log(`Created folder: ${folderPath}`);
     }
-
-    const ytDlpCommand = `yt-dlp -f "137+140" -o - "${link}"`;
-    const ffmpegCommand = `ffmpeg -i pipe:0 -ss ${startInSeconds} -to ${endInSeconds} -c copy "${segmentPath}"`;
-
-    console.log(`Executing yt-dlp command: ${ytDlpCommand}`);
-    console.log(`Executing ffmpeg command: ${ffmpegCommand}`);
 
     const ytDlpProcess = spawn("yt-dlp", ["-f", "136+140", "-o", "-", link]);
     const ffmpegProcess = spawn("ffmpeg", [
@@ -109,9 +99,7 @@ app.post("/api/extract", async (req, res) => {
           client.send(`Error during ffmpeg processing: ${error.message}`);
         }
       });
-      res
-        .status(500)
-        .json({ error: `Error during ffmpeg processing: ${error.message}` });
+      res.status(500).json({ error: `Error during ffmpeg processing: ${error.message}` });
     });
 
     ffmpegProcess.on("close", (code) => {
@@ -125,9 +113,7 @@ app.post("/api/extract", async (req, res) => {
         res.json({ downloadLink: `/downloads/${videoId}_segment.mp4` });
       } else {
         console.error(`ffmpeg process exited with code ${code}`);
-        res
-          .status(500)
-          .json({ error: `ffmpeg process exited with code ${code}` });
+        res.status(500).json({ error: `ffmpeg process exited with code ${code}` });
       }
     });
   } catch (error) {
