@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./VideoForm.css";
 
-const apiPath = "https://yt-cutter-downloader.onrender.com/api/extract";
+const apiPath = "http://localhost:5000/api/extract";
 
 const convertTimeToSeconds = (time) => {
   const [hours, minutes, seconds] = time.split(":").map(Number);
@@ -14,10 +14,12 @@ export const VideoForm = () => {
   const [endTime, setEndTime] = useState("");
   const [folderPath, setFolderPath] = useState("C:/Downloads");
   const [status, setStatus] = useState("");
+  const [progress, setProgress] = useState(0);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus("");
+    setProgress(0);
 
     const startInSeconds = convertTimeToSeconds(startTime);
     const endInSeconds = convertTimeToSeconds(endTime);
@@ -39,10 +41,25 @@ export const VideoForm = () => {
         }),
       });
 
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+
+      // Simulate progress updates
+      const updateInterval = setInterval(() => {
+        setProgress((prev) => {
+          if (prev >= 100) {
+            clearInterval(updateInterval);
+            return 100;
+          }
+          return prev + 10;
+        });
+      }, 1000);
+
       const data = await response.json();
       if (data.downloadLink) {
-        window.location.href = data.downloadLink;
         setStatus("DONE");
+        window.location.href = data.downloadLink;
       } else {
         setStatus(`Error: ${data.error}`);
       }
@@ -99,9 +116,8 @@ export const VideoForm = () => {
           />
         </div>
         <button type="submit" className="submit-button">
-          Download
+          {status === "DOWNLOADING..." ? `Downloading...` : "Download"}
         </button>
-        <div className="status-message">{status}</div>
       </form>
     </div>
   );

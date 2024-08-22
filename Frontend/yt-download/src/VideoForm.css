@@ -1,75 +1,77 @@
-/* VideoForm.css */
 .video-form-container {
   max-width: 600px;
   width: 100%;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  background-color: #1f1f1f;
-  color: #e0e0e0;
-  margin: 0 auto;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+  background-color: #2c2c2c;
+  color: #f0f0f0;
+  margin: 50px auto;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 h2 {
   text-align: center;
   margin-bottom: 30px;
-  color: #e0e0e0;
+  color: #f0f0f0;
   font-weight: bold;
-  font-size: 30px;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 28px;
   text-transform: uppercase;
 }
 
 .video-form {
   display: flex;
   flex-direction: column;
-  margin-right: 20px;
 }
 
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
   font-weight: bold;
 }
 
-.form-group input,
-.form-group select {
+.form-group input {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #333;
-  border-radius: 4px;
-  background-color: #333;
-  color: #e0e0e0;
+  padding: 12px;
+  border: 1px solid #444;
+  border-radius: 6px;
+  background-color: #444;
+  color: #f0f0f0;
+  font-size: 16px;
 }
 
 .submit-button {
-  background-color: #007bff;
+  background-color: #28a745;
   color: #fff;
   border: none;
-  padding: 10px 20px;
-  font-size: 16px;
-  border-radius: 4px;
+  padding: 12px;
+  font-size: 18px;
+  border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s;
-  align-items: center;
-  margin-left: 18px;
+  text-align: center;
+  margin-top: 20px;
 }
 
 .submit-button:hover {
-  background-color: #0056b3;
+  background-color: #218838;
 }
 
-.status-message {
-  margin-top: 20px;
-  padding: 10px;
-  border: 1px solid white;
+.progress-bar-container {
+  width: 100%;
+  background-color: #444;
   border-radius: 4px;
-  background-color: #333;
-  color: #e0e0e0;
-  margin-left: 18px;
-  align-items: center;
+  overflow: hidden;
+  margin-top: 15px;
+}
+
+.progress-bar {
+  height: 10px;
+  background-color: #28a745;
+  width: 0;
+  transition: width 0.3s ease-in-out;
 }
