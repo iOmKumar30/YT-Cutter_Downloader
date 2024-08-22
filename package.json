@@ -1,5 +1,9 @@
 {
   "dependencies": {
     "path-browserify": "^1.0.1"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/ws": "^8.5.12"
   }
 }
