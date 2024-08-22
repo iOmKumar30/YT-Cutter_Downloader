@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "./VideoForm.css";
 
-const apiPath = "http://localhost:5000/api/extract";
+const apiPath = "https://yt-cutter-downloader.onrender.com/api/extract";
 
 const convertTimeToSeconds = (time) => {
   const [hours, minutes, seconds] = time.split(":").map(Number);
