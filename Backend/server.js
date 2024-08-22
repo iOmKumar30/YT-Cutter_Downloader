@@ -12,20 +12,24 @@ const port = process.env.PORT || 5000;
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://yt-cutter-downloader.onrender.com",
+  })
+);
 app.use(bodyParser.json());
 
 const isFolderWritable = async (folderPath) => {
   return new Promise((resolve, reject) => {
     // write a temporary file to the folder and later delete it to check if the folder is writable or not
-    const tempFile = path.join(folderPath, 'temp_write_test.txt');
-    fs.writeFile(tempFile, 'test', (err) => {
+    const tempFile = path.join(folderPath, "temp_write_test.txt");
+    fs.writeFile(tempFile, "test", (err) => {
       if (err) {
-        reject(new Error('Folder is not writable'));
+        reject(new Error("Folder is not writable"));
       } else {
         fs.unlink(tempFile, (unlinkErr) => {
           if (unlinkErr) {
-            reject(new Error('Unable to clean up test file'));
+            reject(new Error("Unable to clean up test file"));
           } else {
             resolve(true);
           }
@@ -34,7 +38,6 @@ const isFolderWritable = async (folderPath) => {
     });
   });
 };
-
 
 app.post("/api/extract", async (req, res) => {
   const { link, startInSeconds, endInSeconds, folderPath } = req.body;
