@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import "./VideoForm.css";
-
+import axios from 'axios';
 const apiPath = "https://yt-cutter-downloader.onrender.com/api/extract";
 
 const convertTimeToSeconds = (time) => {
@@ -27,18 +27,15 @@ export const VideoForm = () => {
     setStatus("DOWNLOADING...");
 
     try {
-      const response = await fetch(apiPath, {
-        method: "POST",
+      const response = await axios.post(apiPath, {
+        link,
+        startInSeconds,
+        endInSeconds,
+        folderPath,
+      }, {
         headers: {
           "Content-Type": "application/json",
         },
-        mode: "cors",
-        body: JSON.stringify({
-          link,
-          startInSeconds,
-          endInSeconds,
-          folderPath,
-        }),
       });
 
       if (!response.ok) {
