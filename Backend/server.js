@@ -17,15 +17,24 @@ app.use(bodyParser.json());
 
 const isFolderWritable = async (folderPath) => {
   return new Promise((resolve, reject) => {
-    fs.access(folderPath, fs.constants.W_OK, (err) => {
+    // write a temporary file to the folder and later delete it to check if the folder is writable or not
+    const tempFile = path.join(folderPath, 'temp_write_test.txt');
+    fs.writeFile(tempFile, 'test', (err) => {
       if (err) {
-        reject(new Error("Folder is not writable"));
+        reject(new Error('Folder is not writable'));
       } else {
-        resolve(true);
+        fs.unlink(tempFile, (unlinkErr) => {
+          if (unlinkErr) {
+            reject(new Error('Unable to clean up test file'));
+          } else {
+            resolve(true);
+          }
+        });
       }
     });
   });
 };
+
 
 app.post("/api/extract", async (req, res) => {
   const { link, startInSeconds, endInSeconds, folderPath } = req.body;
